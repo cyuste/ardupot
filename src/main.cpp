@@ -7,6 +7,7 @@
 #include "HttpServer.h"
 #include "relay.h"
 #include "HttpAp.h"
+#include "potParams.h"
 
 #define HYGROMETER_PORT A0
 #define MIN_HUMIDITY 5000

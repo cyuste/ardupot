@@ -1,7 +1,5 @@
 #include "HttpAp.h"
 
-Preferences preferences;
-
 void configMode ()
 {
   char AP_ssid[15];
@@ -49,10 +47,7 @@ void configMode ()
     String password = server.arg("password");
     Serial.print("WiFI creds received. SSID: ");
     Serial.println(ssid);
-    preferences.begin(APP_NAME, false);
-    preferences.putString(SSID_KEY, ssid);
-    preferences.putString(PASSWD_KEY, password);
-    preferences.end();
+    storeSettings(&ssid, &password);
     server.send(200, "text/plain", "...Reseting iFlowerpot");
     Serial.println(F("Reboot"));
     ESP.restart();
@@ -62,22 +57,4 @@ void configMode ()
   {
     server.handleClient();
   }
-}
-
-String getSSID()
-{
-  String ssid;
-  preferences.begin(APP_NAME, true);
-  ssid = preferences.getString(SSID_KEY, "no_wifi");
-  preferences.end();
-  return ssid;
-}
-
-String getPassword()
-{
-  String password;
-  preferences.begin(APP_NAME, true);
-  password = preferences.getString(PASSWD_KEY, "no_passwd");
-  preferences.end();
-  return password;
 }
