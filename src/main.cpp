@@ -1,12 +1,11 @@
 #include <Arduino.h>
-
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include "hygrometer.h"
 #include "daemonHygro.h"
 #include "httpServer.h"
 #include "relay.h"
-#include "HttpAp.h"
+#include "httpApx.h"
 #include "potParams.h"
 
 #define HYGROMETER_PORT A0
@@ -22,9 +21,10 @@ Hygrometer hygro = Hygrometer(HYGROMETER_PORT);
 DaemonHygro dhygro = DaemonHygro(&pump, &hygro, WATER_TIME_MS, MIN_HUMIDITY);
 ESP32WebServer ws = ESP32WebServer(HTTP_LISTEN_PORT);
 HttpServer httpServer = HttpServer(&dhygro, &ws);
-
+HttpApx ap = HttpApx(&ws);
 TaskHandle_t hygroTask;
 TaskHandle_t httpTask;
+TaskHandle_t apTask;
 
 void setUpDns() {
   if (!MDNS.begin(DNS_NAME)) {
@@ -60,7 +60,6 @@ int setupWifi()
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.println(F("WiFi not connected. Changing to AP mode"));
-    configMode(); // Will never return
     return 0;
   }
   Serial.println(F("WiFi connected"));
@@ -89,16 +88,26 @@ void httpServerLoop(void * pvParameters)
   }
 }
 
+void apServerLoop(void * pvParameters)
+{
+  Serial.print("Config Mode, running on core ");
+  Serial.println(xPortGetCoreID());
+  for(;;)
+  {
+    ap.handleClient();
+  }
+}
+
 void setup()
 {
   Serial.begin(115200);
-  Serial.println(F("Initilizing..."));
+  Serial.println(F("Initializing..."));
   pump.init();
   if (setupWifi())
   {
     setUpDns();
     httpServer.init();
-    Serial.println(F("Initilization Done! Delaying start"));
+    Serial.println(F("Initialization Done! Delaying start"));
     delay(1000);
     Serial.println(F("GO!"));
     xTaskCreatePinnedToCore(
@@ -119,8 +128,19 @@ void setup()
                       &httpTask,      /* Task handle to keep track of created task */
                       1);          /* pin task to core 0 */    
   }
+  else
+  {
+    ap.configMode();
+    xTaskCreatePinnedToCore(
+                  apServerLoop,   /* Task function. */
+                  "Task3",     /* name of task. */
+                  10000,       /* Stack size of task */
+                  NULL,        /* parameter of the task */
+                  1,           /* priority of the task */
+                  &apTask,      /* Task handle to keep track of created task */
+                  0);          /* pin task to core 0 */     
+  }
 }
-
 
 void loop() {
 }

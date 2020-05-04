@@ -1,6 +1,11 @@
-#include "HttpAp.h"
+#include "httpApx.h"
 
-void configMode ()
+HttpApx::HttpApx(ESP32WebServer* ws)
+{
+  this->ws = ws;
+}
+
+void HttpApx::configMode()
 {
   char AP_ssid[15];
   Serial.print("MAC Address: ");
@@ -23,9 +28,8 @@ void configMode ()
   Serial.print(AP_ssid);
   Serial.print(", ESP IP address: ");
   Serial.println(WiFi.softAPIP());
-  ESP32WebServer server(80);
   
-  server.on("/", HTTP_GET, [&]() {
+  this->ws->on("/", HTTP_GET, [&]() {
     const char* form = "<!DOCTYPE html>"
       "<html>"
         "<body>"
@@ -39,22 +43,23 @@ void configMode ()
         "</form> "
         "</body>"
       "</html>\n";
-    server.send(200, "text/html", form);
+    this->ws->send(200, "text/html", form);
   });
 
-  server.on("/do", HTTP_POST, [&]() {
-    String ssid = server.arg("ssid");
-    String password = server.arg("password");
+  this->ws->on("/do", HTTP_POST, [&]() {
+    String ssid = this->ws->arg("ssid");
+    String password = this->ws->arg("password");
     Serial.print("WiFI creds received. SSID: ");
     Serial.println(ssid);
     storeSettings(&ssid, &password);
-    server.send(200, "text/plain", "...Reseting iFlowerpot");
+    this->ws->send(200, "text/plain", "...Reseting iFlowerpot");
     Serial.println(F("Reboot"));
     ESP.restart();
   });
-  server.begin();
-  while(true)
-  {
-    server.handleClient();
-  }
+  this->ws->begin();
+}
+
+void HttpApx::handleClient()
+{
+  this->ws->handleClient();
 }
