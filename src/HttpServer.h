@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP32WebServer.h>
-#include "DaemonHygro.h"
-#include "Relay.h"
+#include "daemonHygro.h"
+#include "relay.h"
 
 
 class HttpServer

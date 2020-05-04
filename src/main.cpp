@@ -3,7 +3,7 @@
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include "hygrometer.h"
-#include "DaemonHygro.h"
+#include "daemonHygro.h"
 #include "HttpServer.h"
 #include "relay.h"
 #include "HttpAp.h"
@@ -15,9 +15,10 @@
 #define RELAY_PORT 8
 #define DNS_NAME "esp32"
 
-Relay* pump = new Relay(RELAY_PORT);
-DaemonHygro* dhygro = new DaemonHygro(pump, HYGROMETER_PORT, WATER_TIME_MS, MIN_HUMIDITY);
-HttpServer httpServer = HttpServer(dhygro, pump);
+Relay pump = Relay(RELAY_PORT);
+Hygrometer hygro = Hygrometer(HYGROMETER_PORT);
+DaemonHygro dhygro = DaemonHygro(&pump, &hygro, WATER_TIME_MS, MIN_HUMIDITY);
+HttpServer httpServer = HttpServer(&dhygro, &pump);
 
 TaskHandle_t hygroTask;
 TaskHandle_t httpTask;
@@ -71,7 +72,7 @@ void dhygroLoop(void * pvParameters)
   Serial.println(xPortGetCoreID());
   for(;;)
   {
-    dhygro->loop();
+    dhygro.loop();
   }
 }
 
@@ -89,7 +90,7 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println(F("Initilizing..."));
-  pump->init();
+  pump.init();
   if (setupWifi())
   {
     setUpDns();
