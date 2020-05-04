@@ -4,7 +4,7 @@
 #include <WiFi.h>
 #include "hygrometer.h"
 #include "daemonHygro.h"
-#include "HttpServer.h"
+#include "httpServer.h"
 #include "relay.h"
 #include "HttpAp.h"
 #include "potParams.h"
@@ -15,11 +15,13 @@
 
 #define RELAY_PORT 8
 #define DNS_NAME "esp32"
+#define HTTP_LISTEN_PORT 80
 
 Relay pump = Relay(RELAY_PORT);
 Hygrometer hygro = Hygrometer(HYGROMETER_PORT);
 DaemonHygro dhygro = DaemonHygro(&pump, &hygro, WATER_TIME_MS, MIN_HUMIDITY);
-HttpServer httpServer = HttpServer(&dhygro, &pump);
+ESP32WebServer ws = ESP32WebServer(HTTP_LISTEN_PORT);
+HttpServer httpServer = HttpServer(&dhygro, &ws);
 
 TaskHandle_t hygroTask;
 TaskHandle_t httpTask;

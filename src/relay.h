@@ -10,7 +10,6 @@ class Relay
   public:
     Relay(byte port);
     void init();
-    uint16_t read();
     byte getRelayStatus();
     void start();
     void stop();

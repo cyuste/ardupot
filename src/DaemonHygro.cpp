@@ -47,7 +47,7 @@ void DaemonHygro::forceStop()
 
 uint16_t DaemonHygro::getPumpStatus()
 {
-  return this->pump->read();
+  return this->pump->getRelayStatus();
 }
 
 void DaemonHygro::loop()

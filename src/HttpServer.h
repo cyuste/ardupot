@@ -7,12 +7,12 @@
 class HttpServer
 {
   private:
-    ESP32WebServer server;
+    ESP32WebServer* server;
     DaemonHygro* dhygro;
     Relay* relay;
     void configureEndpoints();
   public:
-    HttpServer(DaemonHygro* hygro, Relay* relay, int port = 80);
+    HttpServer(DaemonHygro* hygro, ESP32WebServer* ws);
     void init();
     void loop();
 };
