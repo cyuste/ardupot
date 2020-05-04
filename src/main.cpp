@@ -5,17 +5,17 @@
 #include "Hygrometer.h"
 #include "DaemonHygro.h"
 #include "HttpServer.h"
-#include "Rele.h"
+#include "relay.h"
 #include "HttpAp.h"
 
 #define HYGROMETER_PORT A0
 #define MIN_HUMIDITY 5000
 #define WATER_TIME_MS 30000
 
-#define RELE_PORT 8
+#define RELAY_PORT 8
 #define DNS_NAME "esp32"
 
-Rele* pump = new Rele(RELE_PORT);
+Relay* pump = new Relay(RELAY_PORT);
 DaemonHygro* dhygro = new DaemonHygro(pump, HYGROMETER_PORT, WATER_TIME_MS, MIN_HUMIDITY);
 HttpServer httpServer = HttpServer(dhygro, pump);
 

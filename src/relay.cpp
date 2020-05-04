@@ -1,35 +1,35 @@
-#include "Rele.h"
+#include "relay.h"
 
 
 
-Rele::Rele(byte port)
+Relay::Relay(byte port)
 {
   this->port = port;
 }
 
-void Rele::init()
+void Relay::init()
 {
   pinMode(this->port, OUTPUT);
   digitalWrite(this->port, LOW);
   this->isOn = false;
 }
 
-byte Rele::getReleStatus()
+byte Relay::getRelayStatus()
 {
   return isOn? HIGH: LOW;
 }
 
-void Rele::start()
+void Relay::start()
 {
-  Serial.print("Start rele. Port: ");
+  Serial.print("Start Relay. Port: ");
   Serial.println(this->port);
   digitalWrite(this->port, HIGH);
   this->isOn = true;
 }
 
-void Rele::stop()
+void Relay::stop()
 {
-  Serial.print("Stop rele. Port: ");
+  Serial.print("Stop Relay. Port: ");
   Serial.println(this->port);
   digitalWrite(this->port, LOW);
   this->isOn = false;

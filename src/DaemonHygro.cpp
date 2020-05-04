@@ -1,6 +1,6 @@
 #include "DaemonHygro.h"
 
-DaemonHygro::DaemonHygro(Rele* pump, byte hygroPort, uint32_t waterTime, int minHumidity)
+DaemonHygro::DaemonHygro(Relay* pump, byte hygroPort, uint32_t waterTime, int minHumidity)
 {
   this->pump = pump;
   this->hygro = Hygrometer(hygroPort);
@@ -47,16 +47,16 @@ void DaemonHygro::forceStop()
 
 void DaemonHygro::loop()
 {
-  //Serial.println("DAEMON HYGRO. Status: Rele, waterStart, read");
-  //Serial.println(this->pump->getReleStatus());
+  //Serial.println("DAEMON HYGRO. Status: Relay, waterStart, read");
+  //Serial.println(this->pump->getRelayStatus());
   //Serial.println(this->waterStart);
   //Serial.println(this->hygro.read());
-  if (this->pump->getReleStatus() == HIGH && millis() >= (this->waterTime + this->waterStart))
+  if (this->pump->getRelayStatus() == HIGH && millis() >= (this->waterTime + this->waterStart))
   {
     Serial.println("DAEMON HYGRO: Stop pump");
     this->pump->stop();
   }
-  else if (this->pump->getReleStatus() == LOW && this->hygro.read() > this->minHumidity)
+  else if (this->pump->getRelayStatus() == LOW && this->hygro.read() > this->minHumidity)
   {
     Serial.println("DAEMON HYGRO: Start pump");
     this->pump->start();

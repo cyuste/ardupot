@@ -1,17 +1,17 @@
-#include <Arduino.h>
-
 #ifndef RELE_H
 #define RELE_H
-class Rele
+
+#include <Arduino.h>
+class Relay
 {
   private:
     byte port;
     bool isOn;
   public:
-    Rele(byte port);
+    Relay(byte port);
     void init();
     uint16_t read();
-    byte getReleStatus();
+    byte getRelayStatus();
     void start();
     void stop();
 };

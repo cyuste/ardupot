@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP32WebServer.h>
 #include "DaemonHygro.h"
-#include "Rele.h"
+#include "Relay.h"
 
 
 class HttpServer
@@ -9,10 +9,10 @@ class HttpServer
   private:
     ESP32WebServer server;
     DaemonHygro* dhygro;
-    Rele* rele;
+    Relay* relay;
     void configureEndpoints();
   public:
-    HttpServer(DaemonHygro* hygro, Rele* rele, int port = 80);
+    HttpServer(DaemonHygro* hygro, Relay* relay, int port = 80);
     void init();
     void loop();
 };

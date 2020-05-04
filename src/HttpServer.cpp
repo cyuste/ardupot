@@ -1,11 +1,11 @@
 #include "HttpServer.h"
 
-HttpServer::HttpServer(DaemonHygro* dhygro, Rele* rele, int port)
+HttpServer::HttpServer(DaemonHygro* dhygro, Relay* relay, int port)
 {
   Serial.println(F("Initilizing HTTP Server..."));
   this->server = ESP32WebServer(port);
   this->dhygro = dhygro;
-  this->rele = rele;
+  this->relay = relay;
 
   this->configureEndpoints();
 }
@@ -20,7 +20,7 @@ void HttpServer::init()
 void HttpServer::configureEndpoints()
 {
   this->server.on("/status", HTTP_GET, [&]() {
-    String relStatusStr =  this->rele->getReleStatus() == HIGH ? "on" : "off";
+    String relStatusStr =  this->relay->getRelayStatus() == HIGH ? "on" : "off";
     char buffer[60];
     snprintf(buffer, sizeof(buffer), "{\"h\": %d, \"status\": \"%s\", \"irrT\": %d, \"humMin\": %d}\n",
       this->dhygro->read(),
