@@ -1,7 +1,8 @@
-#include <Arduino.h>
-
 #ifndef HYGROMETER_H
 #define HYGROMETER_H
+
+#include <Arduino.h>
+
 class Hygrometer
 {
   private:

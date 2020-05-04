@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Hygrometer.h"
+#include "hygrometer.h"
 #include "relay.h"
 
 

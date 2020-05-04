@@ -2,7 +2,7 @@
 
 #include <ESPmDNS.h>
 #include <WiFi.h>
-#include "Hygrometer.h"
+#include "hygrometer.h"
 #include "DaemonHygro.h"
 #include "HttpServer.h"
 #include "relay.h"
