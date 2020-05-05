@@ -10,12 +10,12 @@
 #define SSID_KEY "ssid"
 #define PASSWD_KEY "paswd"
 
-class HttpApx
+class HttpAp
 {
   private:
     ESP32WebServer* ws;
   public:
-    HttpApx(ESP32WebServer* ws);
+    HttpAp(ESP32WebServer* ws);
     void configMode();
     void handleClient();
 };

@@ -1,11 +1,11 @@
-#include "httpApx.h"
+#include "httpAp.h"
 
-HttpApx::HttpApx(ESP32WebServer* ws)
+HttpAp::HttpAp(ESP32WebServer* ws)
 {
   this->ws = ws;
 }
 
-void HttpApx::configMode()
+void HttpAp::configMode()
 {
   char AP_ssid[15];
   Serial.print("MAC Address: ");
@@ -59,7 +59,7 @@ void HttpApx::configMode()
   this->ws->begin();
 }
 
-void HttpApx::handleClient()
+void HttpAp::handleClient()
 {
   this->ws->handleClient();
 }

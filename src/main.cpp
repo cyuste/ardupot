@@ -5,7 +5,7 @@
 #include "daemonHygro.h"
 #include "httpServer.h"
 #include "relay.h"
-#include "httpApx.h"
+#include "httpAp.h"
 #include "potParams.h"
 
 #define HYGROMETER_PORT A0
@@ -21,7 +21,7 @@ Hygrometer hygro = Hygrometer(HYGROMETER_PORT);
 DaemonHygro dhygro = DaemonHygro(&pump, &hygro, WATER_TIME_MS, MIN_HUMIDITY);
 ESP32WebServer ws = ESP32WebServer(HTTP_LISTEN_PORT);
 HttpServer httpServer = HttpServer(&dhygro, &ws);
-HttpApx ap = HttpApx(&ws);
+HttpAp ap = HttpAp(&ws);
 TaskHandle_t hygroTask;
 TaskHandle_t httpTask;
 TaskHandle_t apTask;
